@@ -210,25 +210,31 @@ def plot_image(image, boxes):
     # Display the image
     ax.imshow(im)
 
-    # box[0] is x midpoint, box[2] is width
-    # box[1] is y midpoint, box[3] is height
+    classes = {0:'aeroplane',1:'bicycle',2:'bird',3:'boat',4:'bottle',5:'bus',6:'car',7:'cat',8:'chair',
+               9:'cow',10:'diningtable',11:'dog',12:'horse',13:'motorbike',14:'person',15:'potted_plant',
+               16:'sheep',17:'sofa',18:'train',19:'tv_monitor'}
+
+    # box[2] is x midpoint, box[4] is width
+    # box[3] is y midpoint, box[5] is height
 
     # Create a Rectangle potch
     for box in boxes:
-        box = box[2:]
-        assert len(box) == 4, "Got more values than in x, y, w, h, in a box!"
-        upper_left_x = box[0] - box[2] / 2
-        upper_left_y = box[1] - box[3] / 2
+        #box = box[2:]
+        #assert len(box) == 4, "Got more values than in x, y, w, h, in a box!"
+        upper_left_x = box[2] - box[4] / 2
+        upper_left_y = box[3] - box[5] / 2
         rect = patches.Rectangle(
             (upper_left_x * width, upper_left_y * height),
-            box[2] * width,
-            box[3] * height,
+            box[4] * width,
+            box[5] * height,
             linewidth=1,
             edgecolor="r",
             facecolor="none",
         )
         # Add the patch to the Axes
         ax.add_patch(rect)
+        rx, ry = rect.get_xy()
+        ax.annotate(f"{classes[int(box[0])]}", (rx, ry), color='red', weight='bold', fontsize=10, ha='left', va='bottom')
 
     plt.show()
 
